@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flyer ADN Afore Coppel - Solución Definitiva</title>
+    <title>Flyer ADN Afore Coppel - Formato PDF Profesional</title>
+    <!-- Librerías de diseño y exportación -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,15 +23,16 @@
         .bg-coppel-blue { background-color: var(--coppel-blue); }
         .text-coppel-blue { color: var(--coppel-blue); }
         
-        /* Contenedor con altura fija forzada para evitar recortes */
-        #flyer-canvas {
+        /* Contenedor optimizado para PDF */
+        #flyer-to-print {
             width: 800px;
-            height: 1300px; 
+            min-height: 1250px; 
             background: white;
             position: relative;
-            overflow: hidden;
             margin: 0 auto;
-            display: block; /* Cambiado de flex a block para estabilidad en captura */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
         }
 
         .wave-container {
@@ -38,7 +40,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 340px; 
+            height: 320px; 
             background-color: var(--coppel-blue);
             clip-path: ellipse(100% 80% at 50% 15%);
             z-index: 1;
@@ -51,13 +53,12 @@
             z-index: 2;
         }
 
-        /* Badge reforzada: Altura fija y centrado vertical forzado */
+        /* Badge con centrado forzado para evitar desplazamientos en PDF */
         .alert-badge {
             background: #ff4d4d;
             color: white;
-            height: 40px;
-            line-height: 40px; /* Centrado vertical clásico */
-            padding: 0 24px;
+            display: inline-block;
+            padding: 10px 25px;
             border-radius: 50px;
             font-weight: 900;
             font-size: 0.9rem;
@@ -66,10 +67,8 @@
             box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4);
             position: relative;
             z-index: 10;
-            display: inline-block;
+            line-height: 1;
             text-align: center;
-            vertical-align: middle;
-            white-space: nowrap;
         }
 
         .image-display-frame {
@@ -79,7 +78,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            height: 440px;
+            height: 400px;
             overflow: hidden;
             border: 1px solid #e2e8f0;
         }
@@ -88,38 +87,36 @@
             position: relative;
             z-index: 10;
             padding: 0 60px;
-            margin-top: 360px; /* Compensa la zona azul del header */
+            margin-top: 340px; /* Margen para no chocar con la zona azul */
+            flex-grow: 1;
         }
         
         .shadow-text {
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* Pie de página anclado matemáticamente al fondo */
         .flyer-footer {
             width: 100%;
             background: white;
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            position: relative;
             z-index: 30;
-            padding-bottom: 40px; /* Espacio de aire final */
+            padding-bottom: 40px;
         }
     </style>
 </head>
-<body class="py-12 flex flex-col items-center">
+<body class="py-12">
 
     <div class="mb-8 text-center px-4">
-        <h1 class="text-xl font-bold text-gray-800 italic uppercase">Editor Corporativo Afore Coppel</h1>
-        <p class="text-gray-500 text-sm italic">Solución de renderizado HD optimizada</p>
+        <h1 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Comunicación Institucional Afore Coppel</h1>
+        <p class="text-gray-500 italic mt-1">Exportación en Formato PDF de Alta Fidelidad</p>
     </div>
 
-    <!-- FLYER CANVAS -->
-    <div id="flyer-canvas" class="shadow-[0_60px_120px_-20px_rgba(0,0,0,0.4)]">
+    <!-- ÁREA DEL FLYER (Lo que se imprimirá) -->
+    <div id="flyer-to-print">
         
         <div class="wave-container"></div>
 
-        <!-- ADN Coppel Bubbles -->
+        <!-- Burbujas ADN Coppel -->
         <div class="bubble w-16 h-16 top-[-20px] left-[10%] opacity-40"></div>
         <div class="bubble w-24 h-24 top-[40px] left-[-40px] opacity-20"></div>
         <div class="bubble w-8 h-8 top-[180px] left-[45%] opacity-60"></div>
@@ -128,7 +125,7 @@
         <div class="bubble w-6 h-6 top-[100px] right-[15%] opacity-50"></div>
         <div class="bubble w-40 h-40 bottom-[20%] left-[-80px] opacity-5"></div>
         
-        <!-- Header Independiente -->
+        <!-- Header -->
         <header style="position: absolute; top: 50px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
             <div class="flex-1">
                 <div class="alert-badge mb-5">¡ATENCIÓN ASESOR!</div>
@@ -143,12 +140,12 @@
                     Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
                 </p>
             </div>
-            <div class="flex-shrink-0">
-                <img src="Coppel2.png" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80?text=Logo+Coppel'">
+            <div class="flex-shrink-0 pt-2">
+                <img src="Coppel2.png" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80?text=Afore+Coppel'">
             </div>
         </header>
 
-        <!-- Contenido Central -->
+        <!-- Contenido -->
         <main class="main-content">
             <section class="mb-8">
                 <p class="text-coppel-blue font-extrabold uppercase tracking-[0.2em] text-xs mb-2">Protocolo de Atención</p>
@@ -212,33 +209,31 @@
                 </div>
             </section>
 
-            <!-- Referencia de PLATAFORMA -->
             <section class="flex flex-col mb-12">
                 <div class="flex items-center space-x-3 mb-3">
                     <div class="h-[1px] bg-gray-200 flex-1"></div>
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Referencia Visual de PLATAFORMA</p>
                     <div class="h-[1px] bg-gray-200 flex-1"></div>
                 </div>
-                
                 <div class="image-display-frame">
-                    <img src="rechazom36.png" alt="Captura" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x300?text=Cargar+rechazom36.png'">
+                    <img src="rechazom36.png" alt="Plataforma" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x300?text=Cargar+rechazom36.png'">
                 </div>
                 <p class="text-center text-gray-400 text-[10px] mt-2 italic">Ubica el documento en tu bandeja de digitalización</p>
             </section>
         </main>
 
-        <!-- FOOTER ANCLADO MATEMÁTICAMENTE (SOLUCIÓN DEFINITIVA) -->
+        <!-- FOOTER INTEGRADO -->
         <footer class="flyer-footer">
             <div class="bg-coppel-yellow h-2 w-full mb-8"></div>
             <div class="px-12 flex justify-between items-center">
-                <div>
+                <div class="w-1/2">
                     <p class="text-coppel-blue font-black text-lg mb-1 italic leading-none uppercase">¿DÓNDE DEBO SUBIRLA?</p>
                     <div class="flex items-center text-gray-500 font-semibold text-sm">
                         <span class="w-1.5 h-1.5 bg-coppel-blue rounded-full mr-2"></span>
                         Sección de Documentos Obligatorios
                     </div>
                 </div>
-                <div class="text-right border-l-2 border-gray-100 pl-8">
+                <div class="text-right border-l-2 border-gray-100 pl-8 w-1/2">
                     <p class="text-xs font-bold text-gray-400 italic mb-1 leading-none">Creado por:</p>
                     <p class="text-coppel-blue font-black text-base uppercase tracking-tight leading-none">GERENCIA DE ATENCIÓN AL PÚBLICO</p>
                 </div>
@@ -246,65 +241,52 @@
         </footer>
     </div>
 
-    <!-- BOTÓN DE DESCARGA -->
+    <!-- BOTONES DE ACCIÓN -->
     <div class="mt-12 mb-24 text-center">
-        <button id="download-btn" onclick="generatePNG(this)" class="group relative inline-flex items-center justify-center px-12 py-5 font-bold text-white transition-all duration-200 bg-coppel-blue rounded-2xl shadow-2xl hover:bg-blue-800 active:scale-95">
+        <button id="download-btn" onclick="generatePDF()" class="group relative inline-flex items-center justify-center px-12 py-5 font-bold text-white transition-all duration-200 bg-red-600 rounded-2xl shadow-2xl hover:bg-red-700 active:scale-95">
             <span class="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
-                Descargar Flyer PNG (Ultra HD)
+                Descargar Flyer en PDF Profesional
             </span>
         </button>
         <p class="text-gray-400 text-xs mt-4 uppercase tracking-widest">Afore Coppel - Comunicación Institucional</p>
     </div>
 
     <script>
-        async function generatePNG(btn) {
-            const flyer = document.getElementById('flyer-canvas');
+        function generatePDF() {
+            const element = document.getElementById('flyer-to-print');
+            const btn = document.getElementById('download-btn');
             const originalHTML = btn.innerHTML;
             
             btn.disabled = true;
-            btn.innerHTML = `<span class="italic">Generando versión final...</span>`;
+            btn.innerHTML = `<span class="italic">Generando documento PDF...</span>`;
 
-            // PASO CRÍTICO: Asegurar que el navegador esté al inicio y el DOM renderizado
-            window.scrollTo(0, 0);
-            await new Promise(r => setTimeout(r, 400));
-
-            try {
-                const canvas = await html2canvas(flyer, {
-                    scale: 3, // Calidad Profesional
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: "#ffffff",
-                    logging: false,
-                    // Forzamos el tamaño exacto del lienzo para evitar cortes
-                    width: 800,
-                    height: 1300,
-                    x: 0,
-                    y: 0,
+            // Configuración del PDF para que sea exacto al diseño
+            const opt = {
+                margin:       0,
+                filename:     'Flyer_AforeCoppel_Atencion_Asesor.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 3, 
+                    useCORS: true, 
+                    letterRendering: true,
                     scrollX: 0,
-                    scrollY: 0,
-                    onclone: (clonedDoc) => {
-                        // Aseguramos que en el clon el footer esté visible
-                        const clonedCanvas = clonedDoc.getElementById('flyer-canvas');
-                        clonedCanvas.style.height = '1300px';
-                    }
-                });
+                    scrollY: 0
+                },
+                jsPDF:        { unit: 'px', format: [800, 1250], orientation: 'portrait' }
+            };
 
-                const link = document.createElement('a');
-                link.download = 'Flyer_AforeCoppel_Final_HD.png';
-                link.href = canvas.toDataURL('image/png', 1.0);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-            } catch (err) {
-                console.error("Error en captura:", err);
-            } finally {
+            // Ejecutar la exportación
+            html2pdf().set(opt).from(element).save().then(() => {
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
-            }
+            }).catch(err => {
+                console.error("Error PDF:", err);
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            });
         }
     </script>
 </body>
