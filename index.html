@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flyer ADN Afore Coppel - Formato PDF Profesional</title>
+    <title>Flyer ADN Afore Coppel - Final Pro Optimizado</title>
     <!-- Librerías de diseño y exportación -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,21 +18,34 @@
             background-color: #f0f2f5;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .bg-coppel-yellow { background-color: var(--coppel-yellow); }
-        .bg-coppel-blue { background-color: var(--coppel-blue); }
-        .text-coppel-blue { color: var(--coppel-blue); }
         
-        /* Contenedor optimizado para PDF */
+        /* Forzamos colores institucionales para la exportación */
+        .bg-coppel-blue { background-color: var(--coppel-blue) !important; }
+        .text-coppel-blue { color: var(--coppel-blue) !important; }
+        .bg-coppel-yellow { background-color: var(--coppel-yellow) !important; }
+        
+        .flyer-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        /* Estructura del Flyer: Altura optimizada para evitar espacios en blanco */
         #flyer-to-print {
             width: 800px;
-            min-height: 1250px; 
+            min-height: 950px; /* Reducido para ser más compacto */
+            height: auto;
             background: white;
             position: relative;
-            margin: 0 auto;
             display: flex;
             flex-direction: column;
             box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            overflow: hidden; 
+            flex-shrink: 0;
         }
 
         .wave-container {
@@ -40,7 +53,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 320px; 
+            height: 310px; 
             background-color: var(--coppel-blue);
             clip-path: ellipse(100% 80% at 50% 15%);
             z-index: 1;
@@ -53,7 +66,6 @@
             z-index: 2;
         }
 
-        /* Badge con centrado forzado para evitar desplazamientos en PDF */
         .alert-badge {
             background: #ff4d4d;
             color: white;
@@ -73,12 +85,12 @@
 
         .image-display-frame {
             background: #f8fafc;
-            border-radius: 2rem;
+            border-radius: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            height: 400px;
+            height: 240px; 
             overflow: hidden;
             border: 1px solid #e2e8f0;
         }
@@ -87,8 +99,8 @@
             position: relative;
             z-index: 10;
             padding: 0 60px;
-            margin-top: 340px; /* Margen para no chocar con la zona azul */
-            flex-grow: 1;
+            margin-top: 330px; 
+            /* Quitamos flex-grow para que el contenido no empuje el footer innecesariamente */
         }
         
         .shadow-text {
@@ -101,192 +113,211 @@
             position: relative;
             z-index: 30;
             padding-bottom: 40px;
+            margin-top: 10px; /* Espacio reducido para máxima compactación */
+        }
+
+        .no-export {
+            margin: 40px 0;
+            text-align: center;
         }
     </style>
 </head>
-<body class="py-12">
+<body>
 
-    <div class="mb-8 text-center px-4">
+    <div class="mt-8 text-center px-4">
         <h1 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Comunicación Institucional Afore Coppel</h1>
-        <p class="text-gray-500 italic mt-1">Exportación en Formato PDF de Alta Fidelidad</p>
+        <p class="text-gray-500 italic mt-1">Diseño Compacto de Alta Fidelidad</p>
     </div>
 
-    <!-- ÁREA DEL FLYER (Lo que se imprimirá) -->
-    <div id="flyer-to-print">
-        
-        <div class="wave-container"></div>
+    <div class="flyer-wrapper">
+        <!-- ÁREA DEL FLYER -->
+        <div id="flyer-to-print">
+            <div class="wave-container"></div>
 
-        <!-- Burbujas ADN Coppel -->
-        <div class="bubble w-16 h-16 top-[-20px] left-[10%] opacity-40"></div>
-        <div class="bubble w-24 h-24 top-[40px] left-[-40px] opacity-20"></div>
-        <div class="bubble w-8 h-8 top-[180px] left-[45%] opacity-60"></div>
-        <div class="bubble w-12 h-12 top-[240px] right-[20%] opacity-30"></div>
-        <div class="bubble w-20 h-20 top-[10px] right-[-30px] opacity-10"></div>
-        <div class="bubble w-6 h-6 top-[100px] right-[15%] opacity-50"></div>
-        <div class="bubble w-40 h-40 bottom-[20%] left-[-80px] opacity-5"></div>
-        
-        <!-- Header -->
-        <header style="position: absolute; top: 50px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
-            <div class="flex-1">
-                <div class="alert-badge mb-5">¡ATENCIÓN ASESOR!</div>
-                <h1 class="text-white text-3xl font-black leading-tight shadow-text uppercase">
-                    RECHAZO POR RIESGO DE<br>
-                    <span class="text-coppel-yellow text-4xl">AUTENTICACIÓN</span>
-                    <div class="text-base font-bold opacity-90 italic normal-case tracking-normal mt-1">
-                        (Identidad no exitosa)
+            <!-- Burbujas ADN Coppel -->
+            <div class="bubble w-16 h-16 top-[-20px] left-[10%] opacity-40"></div>
+            <div class="bubble w-24 h-24 top-[40px] left-[-40px] opacity-20"></div>
+            <div class="bubble w-8 h-8 top-[180px] left-[45%] opacity-60"></div>
+            <div class="bubble w-12 h-12 top-[240px] right-[20%] opacity-30"></div>
+            <div class="bubble w-20 h-20 top-[10px] right-[-30px] opacity-10"></div>
+            <div class="bubble w-6 h-6 top-[100px] right-[15%] opacity-50"></div>
+            
+            <!-- Header -->
+            <header style="position: absolute; top: 50px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
+                <div class="flex-1">
+                    <div class="alert-badge mb-5">¡ATENCIÓN ASESOR!</div>
+                    <h1 class="text-white text-3xl font-black leading-tight shadow-text uppercase">
+                        RECHAZO POR RIESGO DE<br>
+                        <span class="text-coppel-yellow text-4xl">AUTENTICACIÓN</span>
+                        <div class="text-base font-bold opacity-90 italic normal-case tracking-normal mt-1">
+                            (Identidad no exitosa)
+                        </div>
+                    </h1>
+                    <p class="text-white mt-4 text-lg font-bold max-w-xl leading-tight shadow-text">
+                        Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
+                    </p>
+                </div>
+                <div class="flex-shrink-0 pt-2">
+                    <img src="Coppel2.png" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80/00418D/FFFFFF?text=Afore+Coppel'">
+                </div>
+            </header>
+
+            <!-- Contenido -->
+            <main class="main-content">
+                <section class="mb-8">
+                    <p class="text-coppel-blue font-extrabold uppercase tracking-[0.2em] text-xs mb-2">Protocolo de Atención</p>
+                    <h2 class="text-3xl font-black text-coppel-blue leading-tight">
+                        ¿Estás realizando una Modificación de Datos como <span class="bg-coppel-yellow/20 border-b-4 border-coppel-yellow px-1">BENEFICIARIO?</span>
+                    </h2>
+                </section>
+
+                <section class="bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 relative mb-10">
+                    <div class="absolute -top-3 left-8 bg-coppel-blue text-white text-[10px] font-bold py-2 px-6 rounded-full shadow-md z-30">
+                        ACCIÓN CRÍTICA
                     </div>
-                </h1>
-                <p class="text-white mt-4 text-lg font-bold max-w-xl leading-tight shadow-text">
-                    Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
-                </p>
-            </div>
-            <div class="flex-shrink-0 pt-2">
-                <img src="Coppel2.png" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80?text=Afore+Coppel'">
-            </div>
-        </header>
-
-        <!-- Contenido -->
-        <main class="main-content">
-            <section class="mb-8">
-                <p class="text-coppel-blue font-extrabold uppercase tracking-[0.2em] text-xs mb-2">Protocolo de Atención</p>
-                <h2 class="text-3xl font-black text-coppel-blue leading-tight">
-                    ¿Estás realizando una Modificación de Datos como <span class="bg-coppel-yellow/20 border-b-4 border-coppel-yellow px-1">BENEFICIARIO?</span>
-                </h2>
-            </section>
-
-            <section class="bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 relative mb-10">
-                <div class="absolute -top-3 left-8 bg-coppel-blue text-white text-[10px] font-bold py-1.5 px-5 rounded-full shadow-md">
-                    ACCIÓN CRÍTICA
-                </div>
-                <p class="text-xl text-gray-700 leading-snug mb-6">
-                    Para autenticar correctamente la identidad y evitar rechazos, es <span class="text-red-600 font-extrabold underline">OBLIGATORIO</span> que digitalicemos el siguiente documento al expediente:
-                </p>
-                <div class="flex items-center bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                    <div class="mr-6 flex items-center justify-center">
-                        <svg width="65" height="56" viewBox="0 0 433 379" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_6320_19078)">
-                            <rect width="433" height="282.564" rx="12.7353" fill="transparent"/>
-                            <rect x="-21.8271" y="-21.1813" width="476.656" height="51.7814" fill="#006FB9" stroke="black" stroke-width="1.59191"/>
-                            <path d="M21.0518 12.7268C23.2158 12.7268 24.9695 14.4794 24.9697 16.6399C24.9697 18.8006 23.2159 20.554 21.0518 20.554C18.8878 20.5537 17.1348 18.8004 17.1348 16.6399C17.135 14.4795 18.888 12.7271 21.0518 12.7268Z" stroke="white" stroke-width="1.59191"/>
-                            <path d="M35.5068 12.7268C37.6708 12.7268 39.4246 14.4794 39.4248 16.6399C39.4248 18.8006 37.671 20.554 35.5068 20.554C33.3429 20.5537 31.5898 18.8004 31.5898 16.6399C31.5901 14.4795 33.343 12.7271 35.5068 12.7268Z" stroke="white" stroke-width="1.59191"/>
-                            <path d="M49.9609 12.7268C52.1249 12.7268 53.8787 14.4794 53.8789 16.6399C53.8789 18.8006 52.1251 20.554 49.9609 20.554C47.797 20.5537 46.0439 18.8004 46.0439 16.6399C46.0442 14.4795 47.7971 12.7271 49.9609 12.7268Z" stroke="white" stroke-width="1.59191"/>
-                            <line x1="233.949" y1="71.4152" x2="389.469" y2="71.4152" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="233.949" y1="86.4848" x2="389.469" y2="86.4848" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="233.949" y1="101.555" x2="326.624" y2="101.555" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="46.6719" y1="238.442" x2="111.067" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="181.789" y1="238.442" x2="246.184" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="320.049" y1="238.442" x2="384.444" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="59.2432" y1="250.373" x2="97.8719" y2="250.372" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="194.357" y1="250.373" x2="232.985" y2="250.372" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <line x1="332.616" y1="250.373" x2="371.245" y2="250.372" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
-                            <rect x="44.1573" y="62.3326" width="164.318" height="80.6657" rx="11.9393" stroke="black" stroke-width="1.59191"/>
-                            <ellipse cx="78.5576" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
-                            <ellipse cx="213.043" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
-                            <ellipse cx="352.559" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
-                            <rect x="232.985" y="130.44" width="55.6384" height="11.6386" rx="5.81932" fill="#FFDD35" stroke="black" stroke-width="1.59191"/>
-                            </g>
-                            <rect x="0.795956" y="0.795956" width="431.408" height="280.972" rx="11.9393" stroke="black" stroke-width="1.59191"/>
-                            <path d="M145.357 207.094L165.927 225.067L29.869 367.162C24.707 372.553 16.0549 372.94 10.437 368.031C4.69586 363.015 4.31425 354.396 9.58938 348.887L145.357 207.094Z" fill="#FFDD35"/>
-                            <path d="M162.969 225.199L28.3496 365.793C23.9613 370.376 16.6053 370.705 11.8294 366.532C6.94867 362.267 6.62439 354.939 11.1089 350.256L145.482 209.919L162.969 225.199Z" stroke="black" stroke-width="4.09333"/>
-                            <path d="M139.173 253.13L120.753 237.78L130.986 227.547L147.36 240.85L139.173 253.13Z" fill="black"/>
-                            <ellipse cx="82.7606" cy="80.5396" rx="82.7606" ry="80.5396" transform="matrix(0.974778 0.223178 -0.236415 0.971652 140.936 62.8582)" fill="#F3FAFF"/>
-                            <mask id="path-25-inside-1_6320_19078" fill="white">
-                            <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z"/>
-                            </mask>
-                            <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z" fill="#FFDD35"/>
-                            <path d="M96.7842 135.297L92.8069 134.329L92.8069 134.329L96.7842 135.297ZM227.418 56.9727L228.332 52.9826L228.332 52.9826L227.418 56.9727ZM308.161 183.692L312.138 184.66L312.138 184.66L308.161 183.692ZM177.528 262.017L176.615 266.007L176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482L222.436 77.2482L221.522 81.2383ZM121.809 141.024L117.831 140.057L117.831 140.057L121.809 141.024ZM183.441 237.751L182.528 241.741L182.528 241.741L183.441 237.751ZM283.155 177.965L287.133 178.933L287.133 178.933L283.155 177.965ZM96.7842 135.297L100.761 136.265C113.985 81.918 170.216 48.0754 226.504 60.9627L227.418 56.9727L228.332 52.9826C167.88 39.142 107.137 75.433 92.8069 134.329L96.7842 135.297ZM227.418 56.9727L226.504 60.9627C282.754 73.8415 317.396 128.425 304.184 182.725L308.161 183.692L312.138 184.66C326.48 125.718 288.821 66.832 228.332 52.9826L227.418 56.9727ZM308.161 183.692L304.184 182.725C290.961 237.071 234.73 270.914 178.442 258.027L177.528 262.017L176.615 266.007C237.066 279.847 297.808 243.556 312.138 184.66L308.161 183.692ZM177.528 262.017L178.442 258.027C122.192 245.148 87.5496 190.565 100.761 136.265L96.7842 135.297L92.8069 134.329C78.4655 193.272 116.125 252.157 176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482C175.8 66.571 128.901 94.5622 117.831 140.057L121.809 141.024L125.786 141.992C135.748 101.047 178.136 75.5043 220.609 85.2284L221.522 81.2383ZM121.809 141.024L117.831 140.057C106.751 185.598 135.854 231.055 182.528 241.741L183.441 237.751L184.355 233.761C141.92 224.045 115.835 182.891 125.786 141.992L121.809 141.024ZM183.441 237.751L182.528 241.741C229.164 252.419 276.063 224.427 287.133 178.933L283.155 177.965L279.178 176.997C269.216 217.942 226.828 243.485 184.355 233.761L183.441 237.751ZM283.155 177.965L287.133 178.933C298.213 133.392 269.11 87.9344 222.436 77.2482L221.522 81.2383L220.609 85.2284C263.044 94.9439 289.129 136.099 279.178 176.997L283.155 177.965Z" fill="black" mask="url(#path-25-inside-1_6320_19078)"/>
-                            <path d="M237.288 108.758C261.38 121.332 272.034 148.678 263.747 173.035" stroke="black" stroke-width="4.09333"/>
-                            <defs>
-                            <clipPath id="clip0_6320_19078">
-                            <rect width="433" height="282.564" rx="12.7353" fill="transparent"/>
-                            </clipPath>
-                            </defs>
-                        </svg>
+                    <p class="text-xl text-gray-700 leading-snug mb-6">
+                        Para autenticar correctamente la identidad y evitar rechazos, es <span class="text-red-600 font-extrabold underline">OBLIGATORIO</span> que digitalicemos el siguiente documento al expediente:
+                    </p>
+                    <div class="flex items-center bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                        <div class="mr-6 flex-shrink-0 flex items-center justify-center">
+                            <!-- SVG ORIGINAL -->
+                            <svg width="65" height="56" viewBox="0 0 433 379" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_final_opt)">
+                                <rect width="433" height="282.564" rx="12.7353" fill="white"/>
+                                <rect x="-21.8271" y="-21.1813" width="476.656" height="51.7814" fill="#006FB9" stroke="black" stroke-width="1.59191"/>
+                                <path d="M21.0518 12.7268C23.2158 12.7268 24.9695 14.4794 24.9697 16.6399C24.9697 18.8006 23.2159 20.554 21.0518 20.554C18.8878 20.5537 17.1348 18.8004 17.1348 16.6399C17.135 14.4795 18.888 12.7271 21.0518 12.7268Z" stroke="white" stroke-width="1.59191"/>
+                                <path d="M35.5068 12.7268C37.6708 12.7268 39.4246 14.4794 39.4248 16.6399C39.4248 18.8006 37.671 20.554 35.5068 20.554C33.3429 20.5537 31.5898 18.8004 31.5898 16.6399C31.5901 14.4795 33.343 12.7271 35.5068 12.7268Z" stroke="white" stroke-width="1.59191"/>
+                                <path d="M49.9609 12.7268C52.1249 12.7268 53.8787 14.4794 53.8789 16.6399C53.8789 18.8006 52.1251 20.554 49.9609 20.554C47.797 20.5537 46.0439 18.8004 46.0439 16.6399C46.0442 14.4795 47.7971 12.7271 49.9609 12.7268Z" stroke="white" stroke-width="1.59191"/>
+                                <line x1="233.949" y1="71.4152" x2="389.469" y2="71.4152" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <line x1="233.949" y1="86.4848" x2="389.469" y2="86.4848" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <line x1="233.949" y1="101.555" x2="326.624" y2="101.555" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <line x1="46.6719" y1="238.442" x2="111.067" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <line x1="181.789" y1="238.442" x2="246.184" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <line x1="320.049" y1="238.442" x2="384.444" y2="238.442" stroke="black" stroke-width="1.59191" stroke-linecap="round"/>
+                                <rect x="44.1573" y="62.3326" width="164.318" height="80.6657" rx="11.9393" stroke="black" stroke-width="1.59191"/>
+                                <ellipse cx="78.5576" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
+                                <ellipse cx="213.043" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
+                                <ellipse cx="352.559" cy="202.19" rx="20.1103" ry="20.0935" fill="#9CD7FF"/>
+                                <rect x="232.985" y="130.44" width="55.6384" height="11.6386" rx="5.81932" fill="#FFDD35" stroke="black" stroke-width="1.59191"/>
+                                </g>
+                                <rect x="0.795956" y="0.795956" width="431.408" height="280.972" rx="11.9393" stroke="black" stroke-width="1.59191"/>
+                                <path d="M145.357 207.094L165.927 225.067L29.869 367.162C24.707 372.553 16.0549 372.94 10.437 368.031C4.69586 363.015 4.31425 354.396 9.58938 348.887L145.357 207.094Z" fill="#FFDD35"/>
+                                <path d="M162.969 225.199L28.3496 365.793C23.9613 370.376 16.6053 370.705 11.8294 366.532C6.94867 362.267 6.62439 354.939 11.1089 350.256L145.482 209.919L162.969 225.199Z" stroke="black" stroke-width="4.09333"/>
+                                <ellipse cx="82.7606" cy="80.5396" rx="82.7606" ry="80.5396" transform="matrix(0.974778 0.223178 -0.236415 0.971652 140.936 62.8582)" fill="#F3FAFF"/>
+                                <mask id="mask_final_opt" fill="white">
+                                <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z"/>
+                                </mask>
+                                <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z" fill="#FFDD35"/>
+                                <path d="M96.7842 135.297L92.8069 134.329L92.8069 134.329L96.7842 135.297ZM227.418 56.9727L228.332 52.9826L228.332 52.9826L227.418 56.9727ZM308.161 183.692L312.138 184.66L312.138 184.66L308.161 183.692ZM177.528 262.017L176.615 266.007L176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482L222.436 77.2482L221.522 81.2383ZM121.809 141.024L117.831 140.057L117.831 140.057L121.809 141.024ZM183.441 237.751L182.528 241.741L182.528 241.741L183.441 237.751ZM283.155 177.965L287.133 178.933L287.133 178.933L283.155 177.965ZM96.7842 135.297L100.761 136.265C113.985 81.918 170.216 48.0754 226.504 60.9627L227.418 56.9727L228.332 52.9826C167.88 39.142 107.137 75.433 92.8069 134.329L96.7842 135.297ZM227.418 56.9727L226.504 60.9627C282.754 73.8415 317.396 128.425 304.184 182.725L308.161 183.692L312.138 184.66C326.48 125.718 288.821 66.832 228.332 52.9826L227.418 56.9727ZM308.161 183.692L304.184 182.725C290.961 237.071 234.73 270.914 178.442 258.027L177.528 262.017L176.615 266.007C237.066 279.847 297.808 243.556 312.138 184.66L308.161 183.692ZM177.528 262.017L178.442 258.027C122.192 245.148 87.5496 190.565 100.761 136.265L96.7842 135.297L92.8069 134.329C78.4655 193.272 116.125 252.157 176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482C175.8 66.571 128.901 94.5622 117.831 140.057L121.809 141.024L125.786 141.992C135.748 101.047 178.136 75.5043 220.609 85.2284L221.522 81.2383ZM121.809 141.024L117.831 140.057C106.751 185.598 135.854 231.055 182.528 241.741L183.441 237.751L184.355 233.761C141.92 224.045 115.835 182.891 125.786 141.992L121.809 141.024ZM183.441 237.751L182.528 241.741C229.164 252.419 276.063 224.427 287.133 178.933L283.155 177.965L279.178 176.997C269.216 217.942 226.828 243.485 184.355 233.761L183.441 237.751ZM283.155 177.965L287.133 178.933C298.213 133.392 269.11 87.9344 222.436 77.2482L221.522 81.2383L220.609 85.2284C263.044 94.9439 289.129 136.099 279.178 176.997L283.155 177.965Z" fill="black" mask="url(#mask_final_opt)"/>
+                                <path d="M237.288 108.758C261.38 121.332 272.034 148.678 263.747 173.035" stroke="black" stroke-width="4.09333"/>
+                                <defs>
+                                <clipPath id="clip0_final_opt">
+                                <rect width="433" height="282.564" rx="12.7353" fill="white"/>
+                                </clipPath>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-black text-coppel-blue tracking-tighter uppercase leading-none">
+                            Resolución de Pensión
+                        </div>
                     </div>
-                    <div class="text-2xl font-black text-coppel-blue tracking-tighter uppercase leading-none">
-                        Resolución de Pensión
+                </section>
+
+                <section class="flex flex-col mb-4"> <!-- mb reducido de 12 a 4 -->
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="h-[1px] bg-gray-200 flex-1"></div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Referencia Visual de PLATAFORMA</p>
+                        <div class="h-[1px] bg-gray-200 flex-1"></div>
                     </div>
-                </div>
-            </section>
+                    <div class="image-display-frame">
+                        <img src="rechazom36.png" alt="Plataforma" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x300?text=Cargar+rechazom36.png'">
+                    </div>
+                    <p class="text-center text-gray-400 text-[10px] mt-2 italic">Ubica el documento en tu bandeja de digitalización</p>
+                </section>
+            </main>
 
-            <section class="flex flex-col mb-12">
-                <div class="flex items-center space-x-3 mb-3">
-                    <div class="h-[1px] bg-gray-200 flex-1"></div>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Referencia Visual de PLATAFORMA</p>
-                    <div class="h-[1px] bg-gray-200 flex-1"></div>
-                </div>
-                <div class="image-display-frame">
-                    <img src="rechazom36.png" alt="Plataforma" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x300?text=Cargar+rechazom36.png'">
-                </div>
-                <p class="text-center text-gray-400 text-[10px] mt-2 italic">Ubica el documento en tu bandeja de digitalización</p>
-            </section>
-        </main>
-
-        <!-- FOOTER INTEGRADO -->
-        <footer class="flyer-footer">
-            <div class="bg-coppel-yellow h-2 w-full mb-8"></div>
-            <div class="px-12 flex justify-between items-center">
-                <div class="w-1/2">
-                    <p class="text-coppel-blue font-black text-lg mb-1 italic leading-none uppercase">¿DÓNDE DEBO SUBIRLA?</p>
-                    <div class="flex items-center text-gray-500 font-semibold text-sm">
-                        <span class="w-1.5 h-1.5 bg-coppel-blue rounded-full mr-2"></span>
-                        Sección de Documentos Obligatorios
+            <!-- FOOTER -->
+            <footer class="flyer-footer">
+                <div class="bg-coppel-yellow h-2 w-full mb-8"></div>
+                <div class="px-12 flex justify-between items-center">
+                    <div class="w-1/2">
+                        <p class="text-coppel-blue font-black text-lg mb-1 italic leading-none uppercase">¿DÓNDE DEBO SUBIRLA?</p>
+                        <div class="flex items-center text-gray-500 font-semibold text-sm">
+                            <span class="w-1.5 h-1.5 bg-coppel-blue rounded-full mr-2"></span>
+                            Sección de Documentos Obligatorios
+                        </div>
+                    </div>
+                    <div class="text-right border-l-2 border-gray-100 pl-8 w-1/2">
+                        <p class="text-xs font-bold text-gray-400 italic mb-1 leading-none">Creado por:</p>
+                        <p class="text-coppel-blue font-black text-base uppercase tracking-tight leading-none">GERENCIA DE ATENCIÓN AL PÚBLICO</p>
                     </div>
                 </div>
-                <div class="text-right border-l-2 border-gray-100 pl-8 w-1/2">
-                    <p class="text-xs font-bold text-gray-400 italic mb-1 leading-none">Creado por:</p>
-                    <p class="text-coppel-blue font-black text-base uppercase tracking-tight leading-none">GERENCIA DE ATENCIÓN AL PÚBLICO</p>
-                </div>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </div>
 
-    <!-- BOTONES DE ACCIÓN -->
-    <div class="mt-12 mb-24 text-center">
-        <button id="download-btn" onclick="generatePDF()" class="group relative inline-flex items-center justify-center px-12 py-5 font-bold text-white transition-all duration-200 bg-red-600 rounded-2xl shadow-2xl hover:bg-red-700 active:scale-95">
-            <span class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-                Descargar Flyer en PDF Profesional
-            </span>
-        </button>
-        <p class="text-gray-400 text-xs mt-4 uppercase tracking-widest">Afore Coppel - Comunicación Institucional</p>
+    <!-- BOTONES DE ACCIÓN (NO SE EXPORTAN) -->
+    <div class="no-export flex flex-col items-center gap-4 mb-24">
+        <div class="flex gap-4">
+            <button onclick="downloadImage('png')" class="flex items-center px-10 py-5 font-bold text-white bg-blue-600 rounded-2xl shadow-xl hover:bg-blue-700 transition-all active:scale-95">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Descargar PNG de Alta Calidad
+            </button>
+            <button onclick="downloadImage('jpeg')" class="flex items-center px-10 py-5 font-bold text-white bg-green-600 rounded-2xl shadow-xl hover:bg-green-700 transition-all active:scale-95">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Descargar JPG
+            </button>
+        </div>
+        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Afore Coppel - Comunicación Institucional</p>
     </div>
 
     <script>
-        function generatePDF() {
-            const element = document.getElementById('flyer-to-print');
-            const btn = document.getElementById('download-btn');
+        async function downloadImage(format) {
+            const flyer = document.getElementById('flyer-to-print');
+            const btn = event.currentTarget;
             const originalHTML = btn.innerHTML;
             
-            btn.disabled = true;
-            btn.innerHTML = `<span class="italic">Generando documento PDF...</span>`;
+            try {
+                btn.disabled = true;
+                btn.innerHTML = "<span class='animate-pulse'>Procesando Calidad...</span>";
 
-            // Configuración del PDF para que sea exacto al diseño
-            const opt = {
-                margin:       0,
-                filename:     'Flyer_AforeCoppel_Atencion_Asesor.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 3, 
-                    useCORS: true, 
-                    letterRendering: true,
+                // Pequeña espera para asegurar renderizado de fuentes
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                const canvas = await html2canvas(flyer, {
+                    scale: 4, 
+                    useCORS: true,
+                    backgroundColor: "#FFFFFF",
+                    width: 800,
+                    // Capturamos el alto total real del scroll para no perder el footer
+                    height: flyer.scrollHeight,
+                    windowWidth: 800,
                     scrollX: 0,
-                    scrollY: 0
-                },
-                jsPDF:        { unit: 'px', format: [800, 1250], orientation: 'portrait' }
-            };
+                    scrollY: 0,
+                    logging: false,
+                    onclone: (clonedDoc) => {
+                        // Aseguramos que el clon tenga visibilidad total
+                        const clonedFlyer = clonedDoc.getElementById('flyer-to-print');
+                        clonedFlyer.style.height = 'auto';
+                        clonedFlyer.style.minHeight = 'auto';
+                    }
+                });
 
-            // Ejecutar la exportación
-            html2pdf().set(opt).from(element).save().then(() => {
+                const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+                const imageData = canvas.toDataURL(mimeType, 1.0);
+                
+                const link = document.createElement('a');
+                link.download = `Flyer_AforeCoppel_Identidad_Pro.${format}`;
+                link.href = imageData;
+                link.click();
+
+            } catch (error) {
+                console.error("Error al exportar:", error);
+                alert("Hubo un error al generar la imagen.");
+            } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
-            }).catch(err => {
-                console.error("Error PDF:", err);
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
-            });
+            }
         }
     </script>
 </body>
