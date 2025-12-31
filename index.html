@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flyer ADN Afore Coppel - Versión Exportación Garantizada</title>
+    <title>Flyer ADN Afore Coppel - Riesgo Autenticación Final</title>
     <!-- Librerías de diseño y exportación -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -12,7 +12,6 @@
         :root {
             --coppel-yellow: #FFD400;
             --coppel-blue: #00418D;
-            --coppel-blue-dark: #003069;
         }
         body {
             font-family: 'Montserrat', sans-serif;
@@ -24,20 +23,21 @@
             align-items: center;
         }
         
+        /* Colores de marca con prioridad para exportación */
         .bg-coppel-blue { background-color: var(--coppel-blue) !important; }
         .text-coppel-blue { color: var(--coppel-blue) !important; }
         .bg-coppel-yellow { background-color: var(--coppel-yellow) !important; }
         
-        /* Contenedor principal de visualización */
         .flyer-wrapper {
             width: 100%;
             max-width: 800px;
             margin: 20px auto;
         }
 
-        /* Estructura del Flyer: Ancho fijo para evitar errores de renderizado */
+        /* Estructura Blindada: Ancho fijo y altura flexible */
         #flyer-to-print {
             width: 800px;
+            min-height: 950px; 
             background: white;
             position: relative;
             display: flex;
@@ -47,13 +47,13 @@
             flex-shrink: 0;
         }
 
-        /* Reemplazo de clip-path por SVG para fidelidad total en exportación */
+        /* Curva SVG para fidelidad total en la descarga */
         .wave-svg-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 450px; /* AUMENTADO: De 380px a 450px para dar más aire */
+            height: 350px;
             z-index: 1;
         }
 
@@ -64,29 +64,29 @@
             z-index: 2;
         }
 
-        /* Badge corregido para centrado absoluto */
+        /* Badge con centrado blindado mediante grid */
         .alert-badge {
             background: #ff4d4d;
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            place-items: center;
+            text-align: center;
             width: fit-content;
-            height: 40px;
+            height: 44px;
             padding: 0 30px;
             border-radius: 50px;
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 0.95rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.5);
+            box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4);
             position: relative;
             z-index: 10;
-            border: 2px solid rgba(255,255,255,0.2);
+            line-height: 1;
         }
 
         .image-display-frame {
-            background: #f1f5f9;
+            background: #f8fafc;
             border-radius: 1.5rem;
             display: flex;
             align-items: center;
@@ -94,18 +94,18 @@
             position: relative;
             height: 240px; 
             overflow: hidden;
-            border: 2px dashed #cbd5e1; /* Borde punteado para indicar zona de imagen */
+            border: 1px solid #e2e8f0;
         }
 
         .main-content {
             position: relative;
             z-index: 10;
             padding: 0 60px;
-            margin-top: 460px; /* AUMENTADO: De 340px a 460px para evitar encimado */
+            margin-top: 330px; 
         }
         
         .shadow-text {
-            text-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .flyer-footer {
@@ -113,27 +113,13 @@
             background: white;
             position: relative;
             z-index: 30;
-            padding-bottom: 30px;
-            margin-top: 40px; /* Separación extra del contenido */
+            padding-bottom: 35px;
+            margin-top: 10px;
         }
 
         .no-export {
             margin: 40px 0;
             text-align: center;
-        }
-
-        /* Estilo mejorado para el resaltado */
-        .highlight-box {
-            background-color: var(--coppel-yellow);
-            color: var(--coppel-blue);
-            padding: 0 8px;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
-            display: inline-block;
-            transform: skewX(-10deg);
-        }
-        .highlight-box span {
-            display: inline-block;
-            transform: skewX(10deg);
         }
     </style>
 </head>
@@ -141,93 +127,69 @@
 
     <div class="mt-8 text-center px-4">
         <h1 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Comunicación Institucional Afore Coppel</h1>
-        <p class="text-gray-500 italic mt-1">Versión Blindada: Lo que ves es lo que descargas</p>
+        <p class="text-gray-500 italic mt-1">Manual de Prevención: Riesgo de Autenticación</p>
     </div>
 
     <div class="flyer-wrapper">
+        <!-- ÁREA DEL FLYER -->
         <div id="flyer-to-print">
             
-            <!-- Curva Azul mediante SVG -->
             <div class="wave-svg-container">
-                <svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0H800V320C800 320 600 450 400 450C200 450 0 320 0 320V0Z" fill="#00418D"/>
-                    <!-- Añadido un degradado sutil overlay -->
-                    <rect width="800" height="450" fill="url(#paint0_linear)" style="mix-blend-mode: overlay; opacity: 0.3;"/>
-                    <defs>
-                        <linearGradient id="paint0_linear" x1="400" y1="0" x2="400" y2="450" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="white" stop-opacity="0.3"/>
-                            <stop offset="1" stop-color="black" stop-opacity="0.3"/>
-                        </linearGradient>
-                    </defs>
+                <svg width="800" height="350" viewBox="0 0 800 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0H800V240C800 240 600 320 400 320C200 320 0 240 0 240V0Z" fill="#00418D"/>
                 </svg>
             </div>
 
-            <!-- Burbujas ADN Coppel (Ajustadas para no estorbar texto) -->
-            <div class="bubble w-20 h-20 top-[-25px] left-[5%] opacity-30"></div>
-            <div class="bubble w-28 h-28 top-[20px] left-[-50px] opacity-10"></div>
-            <div class="bubble w-10 h-10 top-[280px] left-[55%] opacity-50"></div>
-            <div class="bubble w-16 h-16 top-[320px] right-[15%] opacity-20"></div>
+            <!-- Burbujas ADN Coppel -->
+            <div class="bubble w-16 h-16 top-[-20px] left-[10%] opacity-40"></div>
+            <div class="bubble w-24 h-24 top-[40px] left-[-40px] opacity-20"></div>
+            <div class="bubble w-8 h-8 top-[180px] left-[45%] opacity-60"></div>
+            <div class="bubble w-12 h-12 top-[240px] right-[20%] opacity-30"></div>
+            <div class="bubble w-20 h-20 top-[10px] right-[-30px] opacity-10"></div>
             
             <!-- Header -->
-            <div style="position: absolute; top: 40px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
+            <header style="position: absolute; top: 50px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
                 <div class="flex-1">
-                    <div class="alert-badge mb-8 shadow-lg">⚠️ ¡ATENCIÓN ASESOR!</div>
-                    <h1 class="text-white text-4xl font-black leading-none shadow-text uppercase tracking-tight">
-                        RECHAZO POR<br>RIESGO DE<br>
-                        <span class="text-coppel-yellow text-5xl relative inline-block mt-3">
-                            AUTENTICACIÓN
-                            <svg class="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 100 8" preserveAspectRatio="none">
-                                <path d="M0 4C30 8 70 8 100 4" stroke="#FFD400" stroke-width="3" fill="none"/>
-                            </svg>
-                        </span>
-                        <div class="text-lg font-bold text-blue-100 italic normal-case tracking-wide mt-4 flex items-center gap-2">
-                            <span class="bg-white/20 px-2 py-0.5 rounded text-white not-italic text-sm">INFO</span>
+                    <div class="alert-badge mb-5">¡ATENCIÓN ASESOR!</div>
+                    <h1 class="text-white text-3xl font-black leading-tight shadow-text uppercase">
+                        RECHAZO POR RIESGO DE<br>
+                        <span class="text-coppel-yellow text-4xl">AUTENTICACIÓN</span>
+                        <div class="text-base font-bold opacity-90 italic normal-case tracking-normal mt-1">
                             (Identidad no exitosa)
                         </div>
                     </h1>
+                    <p class="text-white mt-4 text-lg font-bold max-w-xl leading-tight shadow-text">
+                        Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
+                    </p>
                 </div>
                 <div class="flex-shrink-0 pt-2">
-                    <!-- Logo con contenedor blanco para asegurar contraste -->
-                    <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/20 shadow-lg">
-                        <img src="Coppel2.png" alt="Logo" class="h-16 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80/00418D/FFFFFF?text=Afore+Coppel'">
-                    </div>
+                    <!-- Logo Institucional -->
+                    <img src="Coppel2.png" alt="Logo Coppel" class="h-20 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80/00418D/FFFFFF?text=Afore+Coppel'">
                 </div>
-            </div>
-
-            <!-- Texto Descriptivo Header (Ajustado a 295px para quedar dentro del área azul sin chocar) -->
-            <div style="position: absolute; top: 295px; left: 60px; right: 60px; z-index: 20;">
-                 <p class="text-white text-xl font-medium max-w-2xl leading-tight opacity-95 text-shadow-sm">
-                    Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
-                </p>
-            </div>
+            </header>
 
             <main class="main-content">
-                <section class="mb-12 text-center md:text-left">
-                    <p class="text-gray-400 font-bold uppercase tracking-[0.2em] text-[11px] mb-3">Protocolo de Modificación</p>
+                <!-- Sección 1: Protocolo de Atención -->
+                <section class="mb-8">
+                    <p class="text-coppel-blue font-extrabold uppercase tracking-[0.2em] text-xs mb-2">Protocolo de Atención</p>
                     <h2 class="text-3xl font-black text-coppel-blue leading-tight">
-                        ¿Estás realizando una Modificación de Datos como 
-                        <br class="hidden md:block">
-                        <span class="highlight-box mt-2"><span>BENEFICIARIO?</span></span>
+                        ¿Estás realizando una Modificación de Datos como <span class="bg-coppel-yellow/20 border-b-4 border-coppel-yellow px-1">BENEFICIARIO?</span>
                     </h2>
                 </section>
 
-                <section class="bg-white rounded-[2rem] p-10 shadow-xl border border-gray-100 relative mb-12 overflow-visible">
-                    <!-- Badge de Acción Crítica mejorado -->
-                    <div class="absolute -top-5 left-8 bg-gradient-to-r from-blue-700 to-blue-600 text-white text-xs font-black py-3 px-8 rounded-full shadow-lg z-30 flex items-center gap-2 ring-4 ring-white">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <!-- Sección 2: Acción Crítica con Logo SVG -->
+                <section class="bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 relative mb-10">
+                    <div class="absolute -top-3 left-8 bg-coppel-blue text-white text-[10px] font-bold py-2 px-6 rounded-full shadow-md z-30 uppercase">
                         ACCIÓN CRÍTICA
                     </div>
-
-                    <p class="text-xl text-gray-700 leading-relaxed mb-8 mt-2">
-                        Para autenticar correctamente la identidad y evitar rechazos, es <span class="text-red-500 font-black border-b-2 border-red-500">OBLIGATORIO</span> que digitalicemos el siguiente documento al expediente:
+                    <p class="text-xl text-gray-700 leading-snug mb-6">
+                        Para autenticar correctamente la identidad y evitar rechazos, es <span class="text-red-600 font-extrabold underline">OBLIGATORIO</span> que digitalicemos el siguiente documento al expediente:
                     </p>
-
-                    <!-- Caja del Documento Mejorada -->
-                    <div class="flex items-center bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border border-blue-200 shadow-inner">
-                        <div class="mr-6 flex-shrink-0 flex items-center justify-center bg-white p-3 rounded-xl shadow-sm border border-gray-100">
-                            <!-- SVG ORIGINAL -->
-                            <svg width="75" height="65" viewBox="0 0 433 379" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip_svg_inner)">
+                    <div class="flex items-center bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                        <div class="mr-6 flex-shrink-0 flex items-center justify-center">
+                            <!-- Logo SVG Institucional -->
+                            <svg width="65" height="56" viewBox="0 0 433 379" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip_final_autenticacion)">
                                 <rect width="433" height="282.564" rx="12.7353" fill="white"/>
                                 <rect x="-21.8271" y="-21.1813" width="476.656" height="51.7814" fill="#006FB9" stroke="black" stroke-width="1.59191"/>
                                 <path d="M21.0518 12.7268C23.2158 12.7268 24.9695 14.4794 24.9697 16.6399C24.9697 18.8006 23.2159 20.554 21.0518 20.554C18.8878 20.5537 17.1348 18.8004 17.1348 16.6399C17.135 14.4795 18.888 12.7271 21.0518 12.7268Z" stroke="white" stroke-width="1.59191"/>
@@ -249,28 +211,26 @@
                                 <path d="M145.357 207.094L165.927 225.067L29.869 367.162C24.707 372.553 16.0549 372.94 10.437 368.031C4.69586 363.015 4.31425 354.396 9.58938 348.887L145.357 207.094Z" fill="#FFDD35"/>
                                 <path d="M162.969 225.199L28.3496 365.793C23.9613 370.376 16.6053 370.705 11.8294 366.532C6.94867 362.267 6.62439 354.939 11.1089 350.256L145.482 209.919L162.969 225.199Z" stroke="black" stroke-width="4.09333"/>
                                 <ellipse cx="82.7606" cy="80.5396" rx="82.7606" ry="80.5396" transform="matrix(0.974778 0.223178 -0.236415 0.971652 140.936 62.8582)" fill="#F3FAFF"/>
-                                <mask id="mask_inner_svg" fill="white">
+                                <mask id="mask_autenticacion" fill="white">
                                 <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z"/>
                                 </mask>
                                 <path d="M96.7842 135.297C110.561 78.6755 169.048 43.6087 227.418 56.9727C285.788 70.3368 321.938 127.071 308.161 183.692C294.384 240.313 235.898 275.38 177.528 262.017C119.158 248.653 83.0076 191.918 96.7842 135.297ZM221.522 81.2383C176.968 71.0376 132.324 97.8047 121.809 141.024C111.293 184.244 138.887 227.55 183.441 237.751C227.996 247.952 272.639 221.185 283.155 177.965C293.671 134.745 266.077 91.4391 221.522 81.2383Z" fill="#FFDD35"/>
-                                <path d="M96.7842 135.297L92.8069 134.329L92.8069 134.329L96.7842 135.297ZM227.418 56.9727L228.332 52.9826L228.332 52.9826L227.418 56.9727ZM308.161 183.692L312.138 184.66L312.138 184.66L308.161 183.692ZM177.528 262.017L176.615 266.007L176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482L222.436 77.2482L221.522 81.2383ZM121.809 141.024L117.831 140.057L117.831 140.057L121.809 141.024ZM183.441 237.751L182.528 241.741L182.528 241.741L183.441 237.751ZM283.155 177.965L287.133 178.933L287.133 178.933L283.155 177.965ZM96.7842 135.297L100.761 136.265C113.985 81.918 170.216 48.0754 226.504 60.9627L227.418 56.9727L228.332 52.9826C167.88 39.142 107.137 75.433 92.8069 134.329L96.7842 135.297ZM227.418 56.9727L226.504 60.9627C282.754 73.8415 317.396 128.425 304.184 182.725L308.161 183.692L312.138 184.66C326.48 125.718 288.821 66.832 228.332 52.9826L227.418 56.9727ZM308.161 183.692L304.184 182.725C290.961 237.071 234.73 270.914 178.442 258.027L177.528 262.017L176.615 266.007C237.066 279.847 297.808 243.556 312.138 184.66L308.161 183.692ZM177.528 262.017L178.442 258.027C122.192 245.148 87.5496 190.565 100.761 136.265L96.7842 135.297L92.8069 134.329C78.4655 193.272 116.125 252.157 176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482C175.8 66.571 128.901 94.5622 117.831 140.057L121.809 141.024L125.786 141.992C135.748 101.047 178.136 75.5043 220.609 85.2284L221.522 81.2383ZM121.809 141.024L117.831 140.057C106.751 185.598 135.854 231.055 182.528 241.741L183.441 237.751L184.355 233.761C141.92 224.045 115.835 182.891 125.786 141.992L121.809 141.024ZM183.441 237.751L182.528 241.741C229.164 252.419 276.063 224.427 287.133 178.933L283.155 177.965L279.178 176.997C269.216 217.942 226.828 243.485 184.355 233.761L183.441 237.751ZM283.155 177.965L287.133 178.933C298.213 133.392 269.11 87.9344 222.436 77.2482L221.522 81.2383L220.609 85.2284C263.044 94.9439 289.129 136.099 279.178 176.997L283.155 177.965Z" fill="black" mask="url(#mask_inner_svg)"/>
+                                <path d="M96.7842 135.297L92.8069 134.329L92.8069 134.329L96.7842 135.297ZM227.418 56.9727L228.332 52.9826L228.332 52.9826L227.418 56.9727ZM308.161 183.692L312.138 184.66L312.138 184.66L308.161 183.692ZM177.528 262.017L176.615 266.007L176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482L222.436 77.2482L221.522 81.2383ZM121.809 141.024L117.831 140.057L117.831 140.057L121.809 141.024ZM183.441 237.751L182.528 241.741L182.528 241.741L183.441 237.751ZM283.155 177.965L287.133 178.933L287.133 178.933L283.155 177.965ZM96.7842 135.297L100.761 136.265C113.985 81.918 170.216 48.0754 226.504 60.9627L227.418 56.9727L228.332 52.9826C167.88 39.142 107.137 75.433 92.8069 134.329L96.7842 135.297ZM227.418 56.9727L226.504 60.9627C282.754 73.8415 317.396 128.425 304.184 182.725L308.161 183.692L312.138 184.66C326.48 125.718 288.821 66.832 228.332 52.9826L227.418 56.9727ZM308.161 183.692L304.184 182.725C290.961 237.071 234.73 270.914 178.442 258.027L177.528 262.017L176.615 266.007C237.066 279.847 297.808 243.556 312.138 184.66L308.161 183.692ZM177.528 262.017L178.442 258.027C122.192 245.148 87.5496 190.565 100.761 136.265L96.7842 135.297L92.8069 134.329C78.4655 193.272 116.125 252.157 176.615 266.007L177.528 262.017ZM221.522 81.2383L222.436 77.2482C175.8 66.571 128.901 94.5622 117.831 140.057L121.809 141.024L125.786 141.992C135.748 101.047 178.136 75.5043 220.609 85.2284L221.522 81.2383ZM121.809 141.024L117.831 140.057C106.751 185.598 135.854 231.055 182.528 241.741L183.441 237.751L184.355 233.761C141.92 224.045 115.835 182.891 125.786 141.992L121.809 141.024ZM183.441 237.751L182.528 241.741C229.164 252.419 276.063 224.427 287.133 178.933L283.155 177.965L279.178 176.997C269.216 217.942 226.828 243.485 184.355 233.761L183.441 237.751ZM283.155 177.965L287.133 178.933C298.213 133.392 269.11 87.9344 222.436 77.2482L221.522 81.2383L220.609 85.2284C263.044 94.9439 289.129 136.099 279.178 176.997L283.155 177.965Z" fill="black" mask="url(#mask_autenticacion)"/>
                                 <path d="M237.288 108.758C261.38 121.332 272.034 148.678 263.747 173.035" stroke="black" stroke-width="4.09333"/>
                                 <defs>
-                                <clipPath id="clip_svg_inner">
+                                <clipPath id="clip_final_autenticacion">
                                 <rect width="433" height="282.564" rx="12.7353" fill="white"/>
                                 </clipPath>
                                 </defs>
                             </svg>
                         </div>
-                        <div>
-                            <p class="text-xs font-bold text-blue-400 mb-1 tracking-widest uppercase">Documento Requerido</p>
-                            <div class="text-3xl font-black text-coppel-blue tracking-tighter uppercase leading-none">
-                                Resolución de Pensión
-                            </div>
+                        <div class="text-2xl font-black text-coppel-blue tracking-tighter uppercase leading-none">
+                            Resolución de Pensión
                         </div>
                     </div>
                 </section>
 
+                <!-- Sección 3: Referencia Visual de Plataforma -->
                 <section class="flex flex-col mb-4">
                     <div class="flex items-center space-x-3 mb-3">
                         <div class="h-[1px] bg-gray-200 flex-1"></div>
@@ -278,41 +238,38 @@
                         <div class="h-[1px] bg-gray-200 flex-1"></div>
                     </div>
                     <div class="image-display-frame">
-                        <img src="rechazom36.png" alt="Captura de Pantalla Plataforma" class="max-w-full max-h-full object-contain shadow-sm" 
-                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex flex-col items-center justify-center text-center p-8\'><svg class=\'w-12 h-12 text-gray-300 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'/></svg><span class=\'text-gray-400 font-bold text-sm uppercase\'>Vista Previa de Plataforma</span><span class=\'text-gray-300 text-xs\'>(La imagen se cargará al descargar)</span></div>'">
+                        <!-- Referencia a imagen local -->
+                        <img src="rechazom36.png" alt="Referencia Plataforma" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x250/f8fafc/64748b?text=rechazom36.png'">
                     </div>
                     <p class="text-center text-gray-400 text-[10px] mt-2 italic">Ubica el documento en tu bandeja de digitalización</p>
                 </section>
             </main>
 
+            <!-- FOOTER ACTUALIZADO SEGÚN ÚLTIMA SOLICITUD -->
             <footer class="flyer-footer">
-                <div class="bg-coppel-yellow h-2 w-full mb-8 shadow-sm"></div>
+                <div class="bg-coppel-yellow h-2 w-full mb-8"></div>
                 <div class="px-12 flex justify-between items-center">
                     <div class="w-1/2">
+                        <!-- Ajuste de texto solicitado -->
                         <p class="text-coppel-blue font-black text-lg mb-1 italic leading-none uppercase">¿DÓNDE DEBO SUBIRLA?</p>
-                        <div class="flex items-center text-gray-500 font-semibold text-sm">
-                            <span class="w-2 h-2 bg-coppel-blue rounded-full mr-2"></span>
-                            Sección de Documentos Obligatorios
-                        </div>
+                        <p class="text-gray-500 font-bold text-xs uppercase tracking-tighter">Sección de documentos obligatorios</p>
                     </div>
                     <div class="text-right border-l-2 border-gray-100 pl-8 w-1/2">
-                        <p class="text-xs font-bold text-gray-400 italic mb-1 leading-none">Creado por:</p>
-                        <p class="text-coppel-blue font-black text-base uppercase tracking-tight leading-none">GERENCIA DE ATENCIÓN AL PÚBLICO</p>
+                        <p class="text-xs font-bold text-gray-400 italic mb-1">Creado por:</p>
+                        <p class="text-coppel-blue font-black text-base uppercase tracking-tight leading-none">Gerencia de atención al público</p>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- BOTONES DE ACCIÓN -->
+    <!-- BOTONES DE ACCIÓN (NO SE EXPORTAN) -->
     <div class="no-export flex flex-col items-center gap-4 mb-24">
-        <div class="flex gap-4">
-            <button onclick="downloadImage('png')" id="btn-png" class="flex items-center px-10 py-5 font-bold text-white bg-blue-600 rounded-2xl shadow-xl hover:bg-blue-700 transition-all active:scale-95">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Descargar PNG de Alta Fidelidad
-            </button>
-        </div>
-        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Afore Coppel - Formato Institucional Blindado</p>
+        <button onclick="downloadImage('png')" id="btn-png" class="flex items-center px-10 py-5 font-bold text-white bg-blue-600 rounded-2xl shadow-xl hover:bg-blue-700 transition-all active:scale-95">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Descargar Imagen Institucional
+        </button>
+        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Afore Coppel - Versión Blindada 4.5</p>
     </div>
 
     <script>
@@ -324,11 +281,10 @@
             try {
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Procesando Calidad...</span>";
-
-                // PASO CRÍTICO: Esperar a que las fuentes estén listas en el sistema
+                
+                // Aseguramos que las fuentes estén listas antes de la captura
                 await document.fonts.ready;
-
-                // Configuraciones optimizadas para máxima fidelidad
+                
                 const canvas = await html2canvas(flyer, {
                     scale: 4, 
                     useCORS: true,
@@ -339,25 +295,24 @@
                     scrollX: 0,
                     scrollY: 0,
                     logging: false,
-                    letterRendering: true, // Mejora el renderizado de texto Montserrat
+                    letterRendering: true,
                     onclone: (clonedDoc) => {
+                        // Forzamos el renderizado completo del clon
                         const clonedFlyer = clonedDoc.getElementById('flyer-to-print');
-                        clonedFlyer.style.transform = "none";
                         clonedFlyer.style.height = "auto";
+                        clonedFlyer.style.overflow = "visible";
                     }
                 });
-
-                const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
-                const imageData = canvas.toDataURL(mimeType, 1.0);
                 
+                const imageData = canvas.toDataURL('image/png', 1.0);
                 const link = document.createElement('a');
-                link.download = `Flyer_AforeCoppel_Identidad_Final.${format}`;
+                link.download = `Flyer_Coppel_RiesgoAutenticacion_Final_Pro.png`;
                 link.href = imageData;
                 link.click();
-
+                
             } catch (error) {
-                console.error("Error al exportar:", error);
-                alert("Hubo un error al generar la imagen. Intenta nuevamente.");
+                console.error(error);
+                alert("Error al generar la imagen institucional.");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
