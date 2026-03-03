@@ -37,7 +37,7 @@
         /* Estructura Blindada: Ancho fijo y altura flexible */
         #flyer-to-print {
             width: 800px;
-            min-height: 950px; 
+            min-height: 1050px; /* Incrementado para el nuevo contenido */
             background: white;
             position: relative;
             display: flex;
@@ -47,13 +47,13 @@
             flex-shrink: 0;
         }
 
-        /* Curva SVG para fidelidad total en la descarga */
+        /* Curva SVG para fidelidad total en la descarga (AHORA MÁS ALTA) */
         .wave-svg-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 350px;
+            height: 380px; /* Aumentado para dar espacio al subtítulo */
             z-index: 1;
         }
 
@@ -68,12 +68,10 @@
         .alert-badge {
             background: #ff4d4d;
             color: white;
-            display: grid;
-            place-items: center;
+            display: inline-block; /* Cambiado de grid a inline-block (Seguro para html2canvas) */
             text-align: center;
             width: fit-content;
-            height: 44px;
-            padding: 0 30px;
+            padding: 12px 30px; /* El padding reemplaza al height fijo, garantizando el centrado vertical */
             border-radius: 50px;
             font-weight: 900;
             font-size: 0.95rem;
@@ -82,7 +80,6 @@
             box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4);
             position: relative;
             z-index: 10;
-            line-height: 1;
         }
 
         .image-display-frame {
@@ -101,7 +98,7 @@
             position: relative;
             z-index: 10;
             padding: 0 60px;
-            margin-top: 330px; 
+            margin-top: 360px; /* Aumentado en proporción al nuevo SVG */
         }
         
         .shadow-text {
@@ -114,7 +111,7 @@
             position: relative;
             z-index: 30;
             padding-bottom: 35px;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .no-export {
@@ -135,8 +132,9 @@
         <div id="flyer-to-print">
             
             <div class="wave-svg-container">
-                <svg width="800" height="350" viewBox="0 0 800 350" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0H800V240C800 240 600 320 400 320C200 320 0 240 0 240V0Z" fill="#00418D"/>
+                <!-- SVG Rediseñado: La curva lateral bajó de 240px a 300px (60px extras) -->
+                <svg width="800" height="380" viewBox="0 0 800 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0H800V300C800 300 600 380 400 380C200 380 0 300 0 300V0Z" fill="#00418D"/>
                 </svg>
             </div>
 
@@ -149,7 +147,7 @@
             
             <!-- Header Mejorado para evitar desajustes de texto -->
             <header style="position: absolute; top: 50px; left: 60px; right: 60px; z-index: 20;" class="flex justify-between items-start">
-                <div style="max-width: 520px;"> <!-- Ancho controlado para que el texto no se rompa verticalmente -->
+                <div style="max-width: 530px;"> <!-- Ancho controlado para que el texto no se rompa verticalmente -->
                     <div class="alert-badge mb-5">¡ATENCIÓN ASESOR!</div>
                     <h1 class="text-white text-3xl font-black leading-tight shadow-text uppercase">
                         <!-- whitespace-nowrap garantiza que la frase no se rompa antes del <br> -->
@@ -159,7 +157,8 @@
                             (Identidad no exitosa)
                         </div>
                     </h1>
-                    <p class="text-white mt-4 text-lg font-bold max-w-xl leading-tight shadow-text">
+                    <!-- El subtítulo ahora queda completamente contenido sobre el fondo azul gracias al ajuste SVG -->
+                    <p class="text-white mt-5 text-lg font-bold max-w-xl leading-tight shadow-text">
                         Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
                     </p>
                 </div>
@@ -170,6 +169,17 @@
             </header>
 
             <main class="main-content">
+                
+                <!-- NUEVO: Contexto del Rechazo -->
+                <div class="bg-yellow-50 border-l-4 border-coppel-yellow p-4 rounded-r-xl shadow-sm mb-8 flex items-start">
+                    <svg class="w-6 h-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-sm text-gray-800 font-medium leading-relaxed">
+                        <strong class="text-gray-900">Contexto del rechazo:</strong> Recuerda que este rechazo se presenta cuando no se logra autenticar al beneficiario por falta del <span class="text-red-600 font-bold underline">documento de parentesco</span>.
+                    </p>
+                </div>
+
                 <!-- Sección 1: Protocolo de Atención -->
                 <section class="mb-8">
                     <p class="text-coppel-blue font-extrabold uppercase tracking-[0.2em] text-xs mb-2">Protocolo de Atención</p>
@@ -179,7 +189,7 @@
                 </section>
 
                 <!-- Sección 2: Acción Crítica con Logo SVG -->
-                <section class="bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 relative mb-10">
+                <section class="bg-white rounded-[2rem] p-8 shadow-lg border border-gray-100 relative mb-12">
                     <div class="absolute -top-3 left-8 bg-coppel-blue text-white text-[10px] font-bold py-2 px-6 rounded-full shadow-md z-30 uppercase">
                         ACCIÓN CRÍTICA
                     </div>
@@ -231,22 +241,39 @@
                     </div>
                 </section>
 
-                <!-- Sección 3: Referencia Visual de Plataforma -->
-                <section class="flex flex-col mb-4">
-                    <div class="flex items-center space-x-3 mb-3">
-                        <div class="h-[1px] bg-gray-200 flex-1"></div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]">Referencia Visual de PLATAFORMA</p>
-                        <div class="h-[1px] bg-gray-200 flex-1"></div>
+                <!-- NUEVO DISEÑO: Referencia Visual de Plataforma (Área Focal) -->
+                <section class="bg-gray-50 rounded-[2rem] p-8 shadow-inner border-2 border-dashed border-gray-300 relative mb-4 mt-6">
+                    
+                    <!-- Etiqueta de sección 100% blindada para html2canvas (Uso de contenedor 100% con text-align center) -->
+                    <div style="position: absolute; top: -16px; left: 0; width: 100%; text-align: center; z-index: 30;">
+                        <span class="bg-coppel-yellow text-coppel-blue text-xs font-black py-2 px-8 rounded-full shadow-md uppercase tracking-[0.2em] border border-yellow-300 inline-block">
+                            Guía de Plataforma
+                        </span>
                     </div>
-                    <div class="image-display-frame">
-                        <!-- Referencia a imagen local -->
-                        <img src="rechazom36.png" alt="Referencia Plataforma" class="max-w-full max-h-full object-contain" onerror="this.src='https://via.placeholder.com/600x250/f8fafc/64748b?text=rechazom36.png'">
+                    
+                    <div class="text-center mb-5 mt-3">
+                        <h3 class="text-lg font-bold text-gray-800 uppercase tracking-tight">Apartado de Digitalización</h3>
+                        <p class="text-sm text-gray-600 mt-2 leading-tight max-w-lg mx-auto">
+                            Ubica esta sección en tu bandeja:<br>
+                            <span class="bg-gray-200 text-gray-800 font-bold px-3 py-1.5 rounded-md text-[11px] tracking-wider inline-block my-2 border border-gray-300 shadow-sm">DOCUMENTO QUE ACREDITE A LA PERSONA COMO BENEFICIARIO</span><br>
+                            Y asegúrate de cargar ahí el documento <strong class="text-coppel-blue">Resolución de Pensión</strong>.
+                        </p>
                     </div>
-                    <p class="text-center text-gray-400 text-[10px] mt-2 italic">Ubica el documento en tu bandeja de digitalización</p>
+
+                    <!-- Contenedor visual sin márgenes blancos, abarcando el 100% del ancho -->
+                    <div class="shadow-md border-[3px] border-coppel-blue/20 bg-white rounded-[1.5rem] overflow-hidden relative flex">
+                        <!-- Imagen configurada al 100% de ancho sin deformarse -->
+                        <img src="rechazom36.png" alt="Referencia Plataforma" class="w-full h-auto block relative z-10 m-0 p-0" onerror="this.src='https://via.placeholder.com/800x320/f8fafc/64748b?text=Apartado+de+Digitalizaci%C3%B3n'">
+                    </div>
+                    
+                    <div class="flex items-center justify-center mt-4 text-green-600 font-bold text-xs uppercase tracking-widest">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Lugar correcto de digitalización
+                    </div>
                 </section>
             </main>
 
-            <!-- FOOTER ACTUALIZADO SEGÚN ÚLTIMA SOLICITUD -->
+            <!-- FOOTER -->
             <footer class="flyer-footer">
                 <div class="bg-coppel-yellow h-2 w-full mb-8"></div>
                 <div class="px-12 flex justify-between items-center">
@@ -269,7 +296,7 @@
             <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             Descargar Imagen Institucional
         </button>
-        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Afore Coppel - Versión Blindada 4.6</p>
+        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Afore Coppel - Versión Blindada 4.7</p>
     </div>
 
     <script>
@@ -282,11 +309,15 @@
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Procesando Calidad...</span>";
                 
+                // Pausa vital de 150ms: Permite que el navegador respire y actualice el botón 
+                // antes de que html2canvas congele el hilo principal con su procesamiento.
+                await new Promise(resolve => setTimeout(resolve, 150));
+                
                 // Aseguramos que las fuentes estén listas antes de la captura
                 await document.fonts.ready;
                 
                 const canvas = await html2canvas(flyer, {
-                    scale: 4, 
+                    scale: 2, // Bajamos de 4 a 2. Evita desbordamiento de memoria RAM que causaba el bloqueo. Sigue siendo HD.
                     useCORS: true,
                     backgroundColor: "#FFFFFF",
                     width: 800,
@@ -311,8 +342,8 @@
                 link.click();
                 
             } catch (error) {
-                console.error(error);
-                alert("Error al generar la imagen institucional.");
+                console.error("Detalle del error:", error);
+                alert("Error al generar la imagen. Asegúrate de ejecutar este archivo en un entorno web o con tus imágenes locales correctas.");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
