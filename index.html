@@ -328,14 +328,18 @@
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
-                // FIX 1: ALINEACIÓN Y SCROLL
-                // Evitamos la franja blanca forzando la alineación izquierda durante la captura
+                // FIX EXPERTO PARA EL MARGEN IZQUIERDO:
+                // 1. Alineamos todo al punto cero de la pantalla temporalmente
                 window.scrollTo(0, 0);
                 document.body.style.alignItems = 'flex-start';
                 document.querySelector('.flyer-wrapper').style.alignItems = 'flex-start';
 
-                // ELIMINAMOS TEMPORALMENTE EL MARGEN WEB PARA UN PDF PERFECTO DE BORDE A BORDE
-                pages.forEach(page => page.style.marginBottom = '0');
+                // 2. EL SECRETO: Quitamos la sombra (box-shadow) temporalmente. 
+                // html2canvas intentaba "dibujar la sombra", lo que agregaba margen extra a la izquierda.
+                pages.forEach(page => {
+                    page.style.marginBottom = '0';
+                    page.style.boxShadow = 'none'; // <-- ESTO ELIMINA LA FRANJA BLANCA
+                });
                 
                 // Pausa para renderizado de fuentes y reajuste de layout
                 await document.fonts.ready;
@@ -346,14 +350,15 @@
                     margin:       0, // Sin márgenes externos, la hoja abarca el 100% del PDF
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
                     image:        { type: 'jpeg', quality: 1.0 },
-                    // Escala 2 asegura alta resolución de textos e imágenes. Se añaden scrollX y scrollY
+                    // Configuración milimétrica del renderizador
                     html2canvas:  { 
                         scale: 2, 
                         useCORS: true, 
                         letterRendering: true, 
                         backgroundColor: "#ffffff",
                         scrollX: 0,
-                        scrollY: 0
+                        scrollY: 0,
+                        windowWidth: 816 // Congelamos el ancho al tamaño exacto de la hoja Carta
                     },
                     // Formato carta exacto (letter), orientación vertical (portrait)
                     jsPDF:        { unit: 'px', format: [816, 1056], orientation: 'portrait' } 
@@ -366,8 +371,11 @@
                 console.error("Detalle del error:", error);
                 alert("Error al generar el PDF. Asegúrate de probarlo en tu entorno local.");
             } finally {
-                // RESTAURAMOS EL MARGEN VISUAL EN LA WEB Y VOLVEMOS A CENTRAR
-                pages.forEach(page => page.style.marginBottom = '30px');
+                // RESTAURAMOS LOS ESTILOS VISUALES EN LA WEB (Vuelve la sombra y el centrado)
+                pages.forEach(page => {
+                    page.style.marginBottom = '30px';
+                    page.style.boxShadow = '0 10px 40px rgba(0,0,0,0.15)'; // Regresa la sombra
+                });
                 document.body.style.alignItems = 'center';
                 document.querySelector('.flyer-wrapper').style.alignItems = 'center';
                 
