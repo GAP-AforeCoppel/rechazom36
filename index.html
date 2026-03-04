@@ -18,9 +18,7 @@
             background-color: #cbd5e1; 
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            /* SE ELIMINÓ EL FLEXBOX GLOBAL QUE ROMPÍA EL PDF */
         }
         
         /* Colores de marca */
@@ -30,13 +28,11 @@
         
         .flyer-wrapper {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin: 20px 0;
+            /* SE ELIMINÓ EL FLEXBOX GLOBAL AQUÍ TAMBIÉN */
         }
 
-        /* ESTRUCTURA TAMAÑO CARTA EXACTO (US Letter a 96 DPI = 816x1056) */
+        /* ESTRUCTURA TAMAÑO CARTA EXACTO Y CENTRADO SEGURO PARA HTML2CANVAS */
         .pdf-page {
             width: 816px;
             height: 1056px; 
@@ -45,7 +41,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            margin-bottom: 30px; 
+            margin: 0 auto 30px auto; /* ESTO CENTRA LA HOJA SIN ROMPER EL PDF */
             overflow: hidden; 
             flex-shrink: 0;
         }
@@ -103,21 +99,29 @@
             padding-bottom: 35px;
         }
 
-        .no-export {
-            margin: 40px 0;
+        /* Centrado explícito para la barra superior de acciones */
+        .top-header-web {
             text-align: center;
+            padding: 0 16px;
+            margin-top: 32px;
+        }
+        .no-export {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto 40px auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="mt-8 text-center px-4">
+    <div class="top-header-web">
         <h1 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Comunicación Institucional Afore Coppel</h1>
         <p class="text-gray-600 font-medium mt-1">Vista Previa: Documento PDF Institucional (2 Páginas)</p>
     </div>
 
     <!-- BOTÓN DE DESCARGA PDF -->
-    <div class="no-export flex flex-col items-center gap-4 mt-4">
+    <div class="no-export gap-4 mt-4">
         <button onclick="downloadPDF()" id="btn-pdf" class="flex items-center px-10 py-5 font-bold text-white bg-red-600 rounded-2xl shadow-xl hover:bg-red-700 transition-all active:scale-95 text-lg cursor-pointer">
             <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             Descargar Documento PDF Institucional
@@ -274,8 +278,9 @@
                         <div class="text-center mb-8 mt-4">
                             <h3 class="text-xl font-bold text-gray-800 uppercase tracking-tight">Apartado de Digitalización</h3>
                             
-                            <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-3 inline-block mx-auto mt-4 mb-2 shadow-sm">
-                                <p class="text-coppel-blue font-black text-sm italic leading-none uppercase mb-1">¿DÓNDE DEBO SUBIRLA?</p>
+                            <!-- CORRECCIÓN DE TEXTO DESAPARECIDO: Se eliminó el leading-none (que lo colapsaba) y se usó un ancho seguro (w-max) -->
+                            <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-3 mx-auto mt-4 mb-2 shadow-sm w-max">
+                                <p class="text-coppel-blue font-black text-sm italic uppercase mb-1" style="line-height: 1.2;">¿DÓNDE DEBO SUBIRLA?</p>
                                 <p class="text-gray-600 font-bold text-[11px] uppercase tracking-widest">Sección de documentos obligatorios</p>
                             </div>
 
@@ -317,21 +322,29 @@
         </div>
     </div>
 
+    <!-- SCRIPT DE DESCARGA SIMPLIFICADO Y SIN ERRORES -->
     <script>
         async function downloadPDF() {
             const element = document.getElementById('document-to-print');
             const btn = document.getElementById('btn-pdf');
             const originalHTML = btn.innerHTML;
+            const pages = document.querySelectorAll('.pdf-page');
             
             try {
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
-                await document.fonts.ready;
-                // Pequeña pausa para asegurar carga de estilos e imágenes
-                await new Promise(resolve => setTimeout(resolve, 200));
+                // Apagamos la sombra web temporalmente para evitar márgenes falsos al exportar
+                pages.forEach(page => {
+                    page.style.boxShadow = 'none';
+                    page.style.marginBottom = '0';
+                });
                 
-                // Configuración Experta y Limpia
+                await document.fonts.ready;
+                // Pequeña pausa de seguridad
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Configuración totalmente limpia
                 const opt = {
                     margin:       0,
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
@@ -340,37 +353,7 @@
                         scale: 2, 
                         useCORS: true, 
                         letterRendering: true, 
-                        backgroundColor: "#ffffff",
-                        // AQUÍ ESTÁ LA MAGIA EXPERTA: Manipulamos la captura *sin* tocar la página web
-                        onclone: function(clonedDoc) {
-                            // 1. Apagamos el centrado global de la página web clonada para que el inicio sea exacto en X=0
-                            clonedDoc.body.style.display = 'block';
-                            clonedDoc.body.style.margin = '0';
-                            clonedDoc.body.style.padding = '0';
-                            
-                            const wrapper = clonedDoc.querySelector('.flyer-wrapper');
-                            if (wrapper) {
-                                wrapper.style.display = 'block';
-                                wrapper.style.margin = '0';
-                                wrapper.style.padding = '0';
-                            }
-
-                            const cloneElement = clonedDoc.getElementById('document-to-print');
-                            if (cloneElement) {
-                                cloneElement.style.position = 'absolute';
-                                cloneElement.style.top = '0';
-                                cloneElement.style.left = '0';
-                                cloneElement.style.margin = '0';
-                            }
-
-                            // 2. Apagamos la sombra web y el margen visual de separación
-                            // (AQUÍ ESTABA EL ERROR TIPOGRÁFICO, USAMOS clonedDoc directamante por seguridad)
-                            const pages = clonedDoc.querySelectorAll('.pdf-page');
-                            pages.forEach(page => {
-                                page.style.boxShadow = 'none';
-                                page.style.marginBottom = '0';
-                            });
-                        }
+                        backgroundColor: "#ffffff"
                     },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
                 };
@@ -380,8 +363,13 @@
                 
             } catch (error) {
                 console.error("Detalle del error:", error);
-                alert("Error al generar el PDF. Asegúrate de probarlo en tu entorno local.");
+                alert("Hubo un error al generar el PDF.");
             } finally {
+                // Restaurar la sombra de la vista web
+                pages.forEach(page => {
+                    page.style.boxShadow = '0 10px 40px rgba(0,0,0,0.15)';
+                    page.style.marginBottom = '30px';
+                });
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             }
