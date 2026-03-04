@@ -44,6 +44,8 @@
             margin: 0 auto 30px auto; /* ESTO CENTRA LA HOJA SIN ROMPER EL PDF */
             overflow: hidden; 
             flex-shrink: 0;
+            page-break-after: always; /* FORZAR SALTO DE PÁGINA EN PDF */
+            page-break-inside: avoid;
         }
 
         /* Curva SVG para Página 1 */
@@ -110,6 +112,30 @@
             flex-direction: column;
             align-items: center;
             margin: 20px auto 40px auto;
+        }
+
+        /* REGLAS ESTRICTAS PARA GARANTIZAR TAMAÑO CARTA EXACTO */
+        @media print {
+            @page {
+                size: letter portrait;
+                margin: 0;
+            }
+            body {
+                background-color: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-export, .top-header-web {
+                display: none !important;
+            }
+            .flyer-wrapper {
+                margin: 0 !important;
+            }
+            .pdf-page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                page-break-after: always;
+            }
         }
     </style>
 </head>
@@ -334,36 +360,40 @@
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
+                // Forzar el scroll arriba previene bugs de recortes negros o blancos en html2canvas
+                window.scrollTo(0, 0);
+
                 // Apagamos la sombra web temporalmente para evitar márgenes falsos al exportar
                 pages.forEach(page => {
                     page.style.boxShadow = 'none';
                     page.style.marginBottom = '0';
                 });
                 
-                await document.fonts.ready;
-                // Pequeña pausa de seguridad
-                await new Promise(resolve => setTimeout(resolve, 300));
+                // ELIMINADO: await document.fonts.ready; (Causaba el ciclo infinito en la vista previa)
+                // Pequeña pausa para permitir que el DOM se actualice sin las sombras
+                await new Promise(resolve => setTimeout(resolve, 500));
                 
-                // Configuración totalmente limpia
+                // Configuración totalmente limpia y estricta para TAMAÑO CARTA
                 const opt = {
                     margin:       0,
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
-                    image:        { type: 'jpeg', quality: 1.0 },
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    pagebreak:    { mode: ['css', 'legacy'] },
                     html2canvas:  { 
                         scale: 2, 
                         useCORS: true, 
-                        letterRendering: true, 
+                        // ELIMINADO: letterRendering y windowWidth para evitar bloqueos del motor
                         backgroundColor: "#ffffff"
                     },
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
                 };
                 
-                // Generar y descargar el PDF
+                // Generar y descargar el PDF de forma directa
                 await html2pdf().set(opt).from(element).save();
                 
             } catch (error) {
                 console.error("Detalle del error:", error);
-                alert("Hubo un error al generar el PDF.");
+                alert("Hubo un error al generar el PDF. Por favor revisa la consola.");
             } finally {
                 // Restaurar la sombra de la vista web
                 pages.forEach(page => {
