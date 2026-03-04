@@ -36,7 +36,7 @@
             margin: 20px 0;
         }
 
-        /* ESTRUCTURA TAMAÑO CARTA EXACTO (US Letter a 96 DPI) */
+        /* ESTRUCTURA TAMAÑO CARTA EXACTO (US Letter a 96 DPI = 816x1056) */
         .pdf-page {
             width: 816px;
             height: 1056px; 
@@ -118,7 +118,7 @@
 
     <!-- BOTÓN DE DESCARGA PDF -->
     <div class="no-export flex flex-col items-center gap-4 mt-4">
-        <button onclick="downloadPDF()" id="btn-pdf" class="flex items-center px-10 py-5 font-bold text-white bg-red-600 rounded-2xl shadow-xl hover:bg-red-700 transition-all active:scale-95 text-lg">
+        <button onclick="downloadPDF()" id="btn-pdf" class="flex items-center px-10 py-5 font-bold text-white bg-red-600 rounded-2xl shadow-xl hover:bg-red-700 transition-all active:scale-95 text-lg cursor-pointer">
             <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             Descargar Documento PDF Institucional
         </button>
@@ -322,25 +322,16 @@
             const element = document.getElementById('document-to-print');
             const btn = document.getElementById('btn-pdf');
             const originalHTML = btn.innerHTML;
-            const pages = document.querySelectorAll('.pdf-page');
             
             try {
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
-                // SOLUCIÓN DEFINITIVA: 
-                // Solo apagamos la sombra (que es la que generaba el borde blanco).
-                // NO movemos la hoja hacia la izquierda para no romper la captura como ocurrió antes.
-                pages.forEach(page => {
-                    page.style.marginBottom = '0';
-                    page.style.boxShadow = 'none'; 
-                });
-                
-                // Pausa para renderizado de fuentes sin la sombra
                 await document.fonts.ready;
+                // Pequeña pausa para asegurar carga de estilos e imágenes
                 await new Promise(resolve => setTimeout(resolve, 200));
                 
-                // Configuración limpia y estándar de html2pdf
+                // Configuración Experta y Limpia
                 const opt = {
                     margin:       0,
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
@@ -349,9 +340,35 @@
                         scale: 2, 
                         useCORS: true, 
                         letterRendering: true, 
-                        backgroundColor: "#ffffff"
+                        backgroundColor: "#ffffff",
+                        // AQUÍ ESTÁ LA MAGIA EXPERTA: Manipulamos la captura *sin* tocar la página web
+                        onclone: function(clonedDoc) {
+                            // 1. Apagamos el centrado global de la página web clonada para que el inicio sea exacto en X=0
+                            clonedDoc.body.style.display = 'block';
+                            clonedDoc.body.style.alignItems = 'flex-start';
+                            clonedDoc.body.style.margin = '0';
+                            clonedDoc.body.style.padding = '0';
+                            
+                            const wrapper = clonedDoc.querySelector('.flyer-wrapper');
+                            wrapper.style.display = 'block';
+                            wrapper.style.alignItems = 'flex-start';
+                            wrapper.style.margin = '0';
+                            wrapper.style.padding = '0';
+
+                            const cloneElement = clonedDoc.getElementById('document-to-print');
+                            cloneElement.style.position = 'absolute';
+                            cloneElement.style.top = '0';
+                            cloneElement.style.left = '0';
+                            cloneElement.style.margin = '0';
+
+                            // 2. Apagamos la sombra web y el margen visual de separación
+                            const pages = clonedElement.querySelectorAll('.pdf-page');
+                            pages.forEach(page => {
+                                page.style.boxShadow = 'none';
+                                page.style.marginBottom = '0';
+                            });
+                        }
                     },
-                    // Usamos medidas estándar Universales: Carta (Letter) en Pulgadas
                     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
                 };
                 
@@ -362,12 +379,6 @@
                 console.error("Detalle del error:", error);
                 alert("Error al generar el PDF. Asegúrate de probarlo en tu entorno local.");
             } finally {
-                // RESTAURAMOS LA SOMBRA WEB
-                pages.forEach(page => {
-                    page.style.marginBottom = '30px';
-                    page.style.boxShadow = '0 10px 40px rgba(0,0,0,0.15)';
-                });
-                
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             }
