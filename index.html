@@ -345,24 +345,27 @@
                         onclone: function(clonedDoc) {
                             // 1. Apagamos el centrado global de la página web clonada para que el inicio sea exacto en X=0
                             clonedDoc.body.style.display = 'block';
-                            clonedDoc.body.style.alignItems = 'flex-start';
                             clonedDoc.body.style.margin = '0';
                             clonedDoc.body.style.padding = '0';
                             
                             const wrapper = clonedDoc.querySelector('.flyer-wrapper');
-                            wrapper.style.display = 'block';
-                            wrapper.style.alignItems = 'flex-start';
-                            wrapper.style.margin = '0';
-                            wrapper.style.padding = '0';
+                            if (wrapper) {
+                                wrapper.style.display = 'block';
+                                wrapper.style.margin = '0';
+                                wrapper.style.padding = '0';
+                            }
 
                             const cloneElement = clonedDoc.getElementById('document-to-print');
-                            cloneElement.style.position = 'absolute';
-                            cloneElement.style.top = '0';
-                            cloneElement.style.left = '0';
-                            cloneElement.style.margin = '0';
+                            if (cloneElement) {
+                                cloneElement.style.position = 'absolute';
+                                cloneElement.style.top = '0';
+                                cloneElement.style.left = '0';
+                                cloneElement.style.margin = '0';
+                            }
 
                             // 2. Apagamos la sombra web y el margen visual de separación
-                            const pages = clonedElement.querySelectorAll('.pdf-page');
+                            // (AQUÍ ESTABA EL ERROR TIPOGRÁFICO, USAMOS clonedDoc directamante por seguridad)
+                            const pages = clonedDoc.querySelectorAll('.pdf-page');
                             pages.forEach(page => {
                                 page.style.boxShadow = 'none';
                                 page.style.marginBottom = '0';
