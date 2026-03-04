@@ -170,7 +170,7 @@
                     
                     <!-- Contexto del Rechazo -->
                     <div class="bg-yellow-50 border-l-4 border-coppel-yellow p-5 rounded-r-xl shadow-sm mb-10 flex items-start">
-                        <!-- SVG Mejorado: xmlns, width, height y stroke hexadecimal para garantizar renderizado en PDF -->
+                        <!-- SVG Mejorado con stroke hexadecimal -->
                         <svg class="w-8 h-8 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="#ca8a04" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -328,40 +328,31 @@
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
-                // FIX EXPERTO PARA EL MARGEN IZQUIERDO:
-                // 1. Alineamos todo al punto cero de la pantalla temporalmente
-                window.scrollTo(0, 0);
-                document.body.style.alignItems = 'flex-start';
-                document.querySelector('.flyer-wrapper').style.alignItems = 'flex-start';
-
-                // 2. EL SECRETO: Quitamos la sombra (box-shadow) temporalmente. 
-                // html2canvas intentaba "dibujar la sombra", lo que agregaba margen extra a la izquierda.
+                // SOLUCIÓN DEFINITIVA: 
+                // Solo apagamos la sombra (que es la que generaba el borde blanco).
+                // NO movemos la hoja hacia la izquierda para no romper la captura como ocurrió antes.
                 pages.forEach(page => {
                     page.style.marginBottom = '0';
-                    page.style.boxShadow = 'none'; // <-- ESTO ELIMINA LA FRANJA BLANCA
+                    page.style.boxShadow = 'none'; 
                 });
                 
-                // Pausa para renderizado de fuentes y reajuste de layout
+                // Pausa para renderizado de fuentes sin la sombra
                 await document.fonts.ready;
                 await new Promise(resolve => setTimeout(resolve, 200));
                 
-                // Configuración Experta para html2pdf
+                // Configuración limpia y estándar de html2pdf
                 const opt = {
-                    margin:       0, // Sin márgenes externos, la hoja abarca el 100% del PDF
+                    margin:       0,
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
                     image:        { type: 'jpeg', quality: 1.0 },
-                    // Configuración milimétrica del renderizador
                     html2canvas:  { 
                         scale: 2, 
                         useCORS: true, 
                         letterRendering: true, 
-                        backgroundColor: "#ffffff",
-                        scrollX: 0,
-                        scrollY: 0,
-                        windowWidth: 816 // Congelamos el ancho al tamaño exacto de la hoja Carta
+                        backgroundColor: "#ffffff"
                     },
-                    // Formato carta exacto (letter), orientación vertical (portrait)
-                    jsPDF:        { unit: 'px', format: [816, 1056], orientation: 'portrait' } 
+                    // Usamos medidas estándar Universales: Carta (Letter) en Pulgadas
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
                 };
                 
                 // Generar y descargar el PDF
@@ -371,13 +362,11 @@
                 console.error("Detalle del error:", error);
                 alert("Error al generar el PDF. Asegúrate de probarlo en tu entorno local.");
             } finally {
-                // RESTAURAMOS LOS ESTILOS VISUALES EN LA WEB (Vuelve la sombra y el centrado)
+                // RESTAURAMOS LA SOMBRA WEB
                 pages.forEach(page => {
                     page.style.marginBottom = '30px';
-                    page.style.boxShadow = '0 10px 40px rgba(0,0,0,0.15)'; // Regresa la sombra
+                    page.style.boxShadow = '0 10px 40px rgba(0,0,0,0.15)';
                 });
-                document.body.style.alignItems = 'center';
-                document.querySelector('.flyer-wrapper').style.alignItems = 'center';
                 
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
