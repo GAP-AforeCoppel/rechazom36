@@ -160,9 +160,9 @@
                             Evita un rechazo imputable: La validación correcta garantiza la aprobación del trámite.
                         </p>
                     </div>
-                    <!-- Logo alineado a la altura de ATENCIÓN ASESOR -->
+                    <!-- Logo alineado a la altura de ATENCIÓN ASESOR y del mismo tamaño que la hoja 2 (h-16) -->
                     <div class="flex-shrink-0 mt-1">
-                        <img src="Coppel2.png" alt="Logo Coppel" class="h-14 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80/00418D/FFFFFF?text=Afore+Coppel'">
+                        <img src="Coppel2.png" alt="Logo Coppel" class="h-16 w-auto object-contain drop-shadow-md" onerror="this.src='https://via.placeholder.com/150x80/00418D/FFFFFF?text=Afore+Coppel'">
                     </div>
                 </header>
 
@@ -170,7 +170,8 @@
                     
                     <!-- Contexto del Rechazo -->
                     <div class="bg-yellow-50 border-l-4 border-coppel-yellow p-5 rounded-r-xl shadow-sm mb-10 flex items-start">
-                        <svg class="w-8 h-8 text-yellow-600 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- SVG Mejorado: xmlns, width, height y stroke hexadecimal para garantizar renderizado en PDF -->
+                        <svg class="w-8 h-8 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="#ca8a04" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <p class="text-base text-gray-800 font-medium leading-relaxed">
@@ -327,6 +328,12 @@
                 btn.disabled = true;
                 btn.innerHTML = "<span class='animate-pulse'>Estructurando PDF en Alta Resolución...</span>";
                 
+                // FIX 1: ALINEACIÓN Y SCROLL
+                // Evitamos la franja blanca forzando la alineación izquierda durante la captura
+                window.scrollTo(0, 0);
+                document.body.style.alignItems = 'flex-start';
+                document.querySelector('.flyer-wrapper').style.alignItems = 'flex-start';
+
                 // ELIMINAMOS TEMPORALMENTE EL MARGEN WEB PARA UN PDF PERFECTO DE BORDE A BORDE
                 pages.forEach(page => page.style.marginBottom = '0');
                 
@@ -339,8 +346,15 @@
                     margin:       0, // Sin márgenes externos, la hoja abarca el 100% del PDF
                     filename:     'Manual_Prevencion_Autenticacion_Coppel.pdf',
                     image:        { type: 'jpeg', quality: 1.0 },
-                    // Escala 2 asegura alta resolución de textos e imágenes sin colapsar la RAM
-                    html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: "#ffffff" },
+                    // Escala 2 asegura alta resolución de textos e imágenes. Se añaden scrollX y scrollY
+                    html2canvas:  { 
+                        scale: 2, 
+                        useCORS: true, 
+                        letterRendering: true, 
+                        backgroundColor: "#ffffff",
+                        scrollX: 0,
+                        scrollY: 0
+                    },
                     // Formato carta exacto (letter), orientación vertical (portrait)
                     jsPDF:        { unit: 'px', format: [816, 1056], orientation: 'portrait' } 
                 };
@@ -352,8 +366,11 @@
                 console.error("Detalle del error:", error);
                 alert("Error al generar el PDF. Asegúrate de probarlo en tu entorno local.");
             } finally {
-                // RESTAURAMOS EL MARGEN VISUAL EN LA WEB
+                // RESTAURAMOS EL MARGEN VISUAL EN LA WEB Y VOLVEMOS A CENTRAR
                 pages.forEach(page => page.style.marginBottom = '30px');
+                document.body.style.alignItems = 'center';
+                document.querySelector('.flyer-wrapper').style.alignItems = 'center';
+                
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             }
